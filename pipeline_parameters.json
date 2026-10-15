@@ -1,0 +1,1778 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-15T14:01:56Z",
+  "scope": "rotina comum de montagem; exclui vacinal, CIQ/CEQ, controles, EC e nsP3",
+  "viruses": {
+    "chikv": {
+      "pipeline": "chikvAssembly",
+      "pipeline_version": "1.0-NF",
+      "environment_files": [
+        "chikvAssembly.yml"
+      ],
+      "parameters": {
+        "consensus_min_depth": 5,
+        "consensus_min_qual": 20,
+        "enable_low_coverage_gate": true,
+        "genome_size": 11800,
+        "mapq": 10,
+        "min_mapped_reads": 100,
+        "min_mean_depth": 5,
+        "pilon_mindepth": 5,
+        "pilon_minmq": 10,
+        "pilon_minqual": 20,
+        "require_nextclade": true,
+        "trim_minlen": 35,
+        "trim_qual": 20,
+        "trim_window_size": 5,
+        "variant_min_depth": 10,
+        "variant_min_freq": 0.25,
+        "variant_min_qual": 20
+      },
+      "tools": {
+        "bwa": {
+          "version": "0.7.19",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "cutadapt": {
+          "version": "5.1",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "ivar": {
+          "version": "1.4.4",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 20,
+                "-m": 5
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 20,
+                "-t": 0.25,
+                "-m": 10,
+                "-r": true
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "nextclade": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--fix": "gaps,indels",
+                "--mindepth": 5,
+                "--minqual": 20,
+                "--minmq": 10
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": "1.23.1",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "PILON_REMAP",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 500,
+                "-Q": 20
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 10
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "PILON_REMAP",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-H": true
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": "1.5",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "trimmomatic": {
+          "version": "0.40",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "3",
+                "TRAILING": "3",
+                "SLIDINGWINDOW": "5:20",
+                "MINLEN": "35"
+              },
+              "processes": [
+                "PREPROCESS_READS"
+              ]
+            }
+          ]
+        },
+        "vapor": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-m": 0.7
+              },
+              "processes": [
+                "SELECT_GENOTYPE_VAPOR"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": [
+        {
+          "name": "chikV",
+          "reference_accession": "NC_004162.2",
+          "version_tag": "2025-09-24--07-29-03Z"
+        }
+      ]
+    },
+    "denv": {
+      "pipeline": "denvAssembly",
+      "pipeline_version": "5.1-NF",
+      "environment_files": [
+        "denvAssembly.yml"
+      ],
+      "parameters": {
+        "consensus_min_depth": 5,
+        "consensus_min_qual": 20,
+        "enable_low_coverage_gate": true,
+        "mapq": 10,
+        "min_mapped_reads": 100,
+        "min_mean_depth": 5,
+        "nextclade_dataset": "2026-04-14--11-55-23Z",
+        "pilon_mindepth": 5,
+        "pilon_minmq": 10,
+        "pilon_minqual": 20,
+        "require_nextclade": true,
+        "trim_minlen": 35,
+        "trim_qual": 20,
+        "trim_window_size": 5,
+        "variant_min_depth": 5,
+        "variant_min_freq": 0.25,
+        "variant_min_qual": 20
+      },
+      "tools": {
+        "bwa": {
+          "version": "0.7.19",
+          "steps": [
+            {
+              "subcommand": "mem",
+              "options": {
+                "-t": 1
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_SEROTYPE"
+              ]
+            }
+          ]
+        },
+        "cutadapt": {
+          "version": "5.1",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-j": true
+              },
+              "processes": [
+                "PREPROCESS_READS"
+              ]
+            }
+          ]
+        },
+        "ivar": {
+          "version": "1.4.4",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 20,
+                "-m": 5
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 20,
+                "-t": 0.25,
+                "-m": 5
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "nextclade": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--fix": "gaps,indels",
+                "--threads": 1,
+                "--mindepth": 5,
+                "--minqual": 20,
+                "--minmq": 10
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": "1.23.1",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_SEROTYPE",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-Q": 0
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-H": true
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 10
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_SEROTYPE"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_SEROTYPE",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260,
+                "-L": true
+              },
+              "processes": [
+                "SELECT_SEROTYPE"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": "1.5",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "trimmomatic": {
+          "version": "0.40",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "3",
+                "TRAILING": "3",
+                "SLIDINGWINDOW": "5:20",
+                "MINLEN": "35",
+                "-threads": true
+              },
+              "processes": [
+                "PREPROCESS_READS"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": [
+        {
+          "name": "DENV-1",
+          "reference_accession": "NC_001477.1",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "DENV-2",
+          "reference_accession": "NC_001474.2",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "DENV-3",
+          "reference_accession": "NC_001475.2",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "DENV-4",
+          "reference_accession": "NC_002640.1",
+          "version_tag": "2026-04-14--11-55-23Z"
+        }
+      ]
+    },
+    "zikv": {
+      "pipeline": "zikvAssembly",
+      "pipeline_version": "1.0-NF",
+      "environment_files": [
+        "zikvAssembly.yml"
+      ],
+      "parameters": {
+        "consensus_min_depth": 5,
+        "consensus_min_qual": 20,
+        "enable_low_coverage_gate": true,
+        "genome_size": 10794,
+        "mapq": 10,
+        "min_mapped_reads": 100,
+        "min_mean_depth": 5,
+        "pilon_mindepth": 5,
+        "pilon_minmq": 10,
+        "pilon_minqual": 20,
+        "trim_leading": 5,
+        "trim_minlen": 50,
+        "trim_qual": 20,
+        "trim_trailing": 5,
+        "trim_window_size": 4,
+        "variant_min_depth": 5,
+        "variant_min_freq": 0.25,
+        "variant_min_qual": 20
+      },
+      "tools": {
+        "bwa": {
+          "version": "0.7.19",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "cutadapt": {
+          "version": "5.1",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "ivar": {
+          "version": "1.4.4",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 20,
+                "-m": 5
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 20,
+                "-t": 0.25,
+                "-m": 5
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--fix": "gaps,indels",
+                "--mindepth": 5,
+                "--minqual": 20,
+                "--minmq": 10
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": "1.23.1",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "PILON_REMAP",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 500,
+                "-Q": 20
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 10
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_GENOTYPE"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_GENOTYPE",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-H": true
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": "1.5",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "trimmomatic": {
+          "version": "0.40",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "5",
+                "TRAILING": "5",
+                "SLIDINGWINDOW": "4:20",
+                "MINLEN": "50"
+              },
+              "processes": [
+                "PREPROCESS_READS"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": []
+    },
+    "wnv": {
+      "pipeline": "westNileAssembly",
+      "pipeline_version": "1.0-NF",
+      "environment_files": [
+        "wnvAssembly.yml"
+      ],
+      "parameters": {
+        "consensus_min_depth": 5,
+        "consensus_min_qual": 20,
+        "enable_low_coverage_gate": true,
+        "mapq": 10,
+        "min_mapped_reads": 100,
+        "min_mean_depth": 5,
+        "nextclade_dataset": "2026-04-14--11-55-23Z",
+        "pilon_mindepth": 5,
+        "pilon_minmq": 10,
+        "pilon_minqual": 20,
+        "require_nextclade": true,
+        "trim_minlen": 35,
+        "trim_qual": 20,
+        "trim_window_size": 5,
+        "variant_min_depth": 5,
+        "variant_min_freq": 0.25,
+        "variant_min_qual": 20
+      },
+      "tools": {
+        "bwa": {
+          "version": "0.7.19",
+          "steps": [
+            {
+              "subcommand": "mem",
+              "options": {
+                "-t": 1
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_LINEAGE"
+              ]
+            }
+          ]
+        },
+        "cutadapt": {
+          "version": "5.1",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-j": true
+              },
+              "processes": [
+                "PREPROCESS_READS"
+              ]
+            }
+          ]
+        },
+        "ivar": {
+          "version": "1.4.4",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 20,
+                "-m": 5
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 20,
+                "-t": 0.25,
+                "-m": 5
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "nextclade": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--fix": "gaps,indels",
+                "--threads": 1,
+                "--mindepth": 5,
+                "--minqual": 20,
+                "--minmq": 10
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": "1.23.1",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "PILON_REMAP",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-Q": 0
+              },
+              "processes": [
+                "PILON_REMAP"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 10
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_LINEAGE"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "PILON_REMAP",
+                "SELECT_LINEAGE",
+                "VARIANTS_AND_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-H": true
+              },
+              "processes": [
+                "PILON_REMAP",
+                "VARIANTS_AND_STATS"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": "1.5",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "trimmomatic": {
+          "version": "0.40",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "3",
+                "TRAILING": "3",
+                "SLIDINGWINDOW": "5:20",
+                "MINLEN": "35",
+                "-threads": true
+              },
+              "processes": [
+                "PREPROCESS_READS"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": [
+        {
+          "name": "West Nile Virus",
+          "reference_accession": "NC_009942.1",
+          "version_tag": "2026-04-14--11-55-23Z"
+        }
+      ]
+    },
+    "rabv": {
+      "pipeline": "rabvAssembly",
+      "pipeline_version": null,
+      "environment_files": [],
+      "parameters": {
+        "ivar_freq": 0.03,
+        "min_depth": 10,
+        "min_len": 36,
+        "min_mapq": 30,
+        "min_qual": 30
+      },
+      "tools": {
+        "bowtie2": {
+          "version": null,
+          "note": "yml do ambiente não fornecido Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "bowtie2-build": {
+          "version": null,
+          "note": "yml do ambiente não fornecido Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "ivar": {
+          "version": null,
+          "note": "yml do ambiente não fornecido",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 30,
+                "-m": 10
+              },
+              "processes": [
+                "IVAR_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 30,
+                "-t": 0.03,
+                "-m": 10
+              },
+              "processes": [
+                "IVAR_VARIANTS"
+              ]
+            }
+          ]
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--minmq": 30,
+                "--fix": "gaps,indels",
+                "--mindepth": 10
+              },
+              "processes": [
+                "PILON"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": null,
+          "note": "yml do ambiente não fornecido",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "ASSEMBLY_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-Q": 0
+              },
+              "processes": [
+                "IVAR_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "IVAR_VARIANTS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "ASSEMBLY_STATS",
+                "BOWTIE2_MAP"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 30
+              },
+              "processes": [
+                "BOWTIE2_MAP",
+                "BOWTIE2_REMAP"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": null,
+          "note": "yml do ambiente não fornecido Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "trimmomatic": {
+          "version": null,
+          "note": "yml do ambiente não fornecido",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "3",
+                "TRAILING": "3",
+                "SLIDINGWINDOW": "4:20",
+                "MINLEN": "36"
+              },
+              "processes": [
+                "TRIMMOMATIC"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": []
+    },
+    "rsv": {
+      "pipeline": "rsvAssembly",
+      "pipeline_version": null,
+      "environment_files": [
+        "rsvAssembly.yml"
+      ],
+      "parameters": {
+        "ivar_freq": 0.25,
+        "min_depth": 10,
+        "min_len": 35,
+        "min_mapq": 10,
+        "min_qual": 20
+      },
+      "tools": {
+        "bwa": {
+          "version": "0.7.19",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "cutadapt": {
+          "version": "5.1",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "ivar": {
+          "version": "1.4.4",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 20,
+                "-m": 10
+              },
+              "processes": [
+                "IVAR_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 20,
+                "-t": 0.25,
+                "-m": 10
+              },
+              "processes": [
+                "IVAR_VARIANTS"
+              ]
+            }
+          ]
+        },
+        "nextclade": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--fix": "gaps,indels",
+                "--mindepth": 10,
+                "--minqual": 20,
+                "--minmq": 10
+              },
+              "processes": [
+                "PILON"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": "1.23.1",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "ASSEMBLY_STATS",
+                "GENE_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-Q": 0
+              },
+              "processes": [
+                "IVAR_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "IVAR_VARIANTS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "ASSEMBLY_STATS",
+                "BWA_MAP"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 10
+              },
+              "processes": [
+                "BWA_MAP"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-b": true,
+                "-q": 10
+              },
+              "processes": [
+                "BWA_REMAP"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-H": true
+              },
+              "processes": [
+                "GENE_STATS"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": "1.5",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "trimmomatic": {
+          "version": "0.40",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "3",
+                "TRAILING": "3",
+                "SLIDINGWINDOW": "5:20",
+                "MINLEN": "35"
+              },
+              "processes": [
+                "TRIMMOMATIC"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": [
+        {
+          "name": "RSV-A",
+          "reference_accession": "EPI_ISL_412866",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "RSV-B",
+          "reference_accession": "EPI_ISL_1653999",
+          "version_tag": "2026-04-14--11-55-23Z"
+        }
+      ]
+    },
+    "flu": {
+      "pipeline": "fluAssembly",
+      "pipeline_version": "5.0-NF",
+      "environment_files": [
+        "fluAssembly.yml"
+      ],
+      "parameters": {},
+      "tools": {
+        "blastn": {
+          "version": "2.13.0",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-db": "tmp_db",
+                "-query": true,
+                "-max_target_seqs": 1
+              },
+              "processes": [
+                "DETECT_GENOTYPE"
+              ]
+            }
+          ]
+        },
+        "bowtie2": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--very-sensitive": true
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY",
+                "WHOLE_GENOME_STATS"
+              ]
+            }
+          ]
+        },
+        "bowtie2-build": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "cutadapt": {
+          "version": "3.5",
+          "steps": [],
+          "note": "Executada com parâmetros padrão."
+        },
+        "ivar": {
+          "version": "1.3.1",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-m": 1,
+                "-q": 0,
+                "-t": 0
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-t": 0.25,
+                "-m": 10
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            }
+          ]
+        },
+        "makeblastdb": {
+          "version": "2.13.0",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-in": true,
+                "-dbtype": "nucl",
+                "-out": "tmp_db"
+              },
+              "processes": [
+                "DETECT_GENOTYPE"
+              ]
+            }
+          ]
+        },
+        "minimap2": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            }
+          ]
+        },
+        "nextclade": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": "dataset",
+              "options": {
+                "--name": "flu_h1n1pdm_ha"
+              },
+              "processes": [
+                "UPDATE_NEXTCLADE_DATASETS"
+              ]
+            },
+            {
+              "subcommand": "dataset",
+              "options": {
+                "--name": "flu_h3n2_ha"
+              },
+              "processes": [
+                "UPDATE_NEXTCLADE_DATASETS"
+              ]
+            },
+            {
+              "subcommand": "dataset",
+              "options": {
+                "--name": "flu_vic_ha"
+              },
+              "processes": [
+                "UPDATE_NEXTCLADE_DATASETS"
+              ]
+            },
+            {
+              "subcommand": "dataset",
+              "options": {
+                "--name": "flu_yam_ha"
+              },
+              "processes": [
+                "UPDATE_NEXTCLADE_DATASETS"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": "1.6",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "DEPTH_PLOTS",
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 1000,
+                "-C": 50,
+                "-Q": 0
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-Q": 0
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "sort",
+              "options": {
+                "-n": true
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-u": true,
+                "-f": 1,
+                "-F": 12
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-Sb": true
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 20
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY",
+                "WHOLE_GENOME_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "SEGMENT_ASSEMBLY",
+                "WHOLE_GENOME_STATS"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "trimmomatic": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "20",
+                "TRAILING": "20",
+                "SLIDINGWINDOW": "4:20",
+                "MINLEN": "50"
+              },
+              "processes": [
+                "TRIMMOMATIC"
+              ]
+            }
+          ]
+        },
+        "vapor": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        }
+      },
+      "nextclade_datasets": [
+        {
+          "name": "Influenza A H1N1pdm HA",
+          "reference_accession": "MW626062",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "Influenza A H3N2 HA",
+          "reference_accession": "EPI1857216",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "Influenza B Victoria HA",
+          "reference_accession": "KX058884",
+          "version_tag": "2026-04-14--11-55-23Z"
+        },
+        {
+          "name": "Influenza B Yamagata HA",
+          "reference_accession": "JN993010",
+          "version_tag": "2026-04-14--11-55-23Z"
+        }
+      ]
+    },
+    "sars-cov-2": {
+      "pipeline": "sarsAssembly",
+      "pipeline_version": "8.0-NF",
+      "environment_files": [
+        "pangolin.yml"
+      ],
+      "parameters": {
+        "genome_size": 29903
+      },
+      "tools": {
+        "blastn": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-query": true,
+                "-db": "ba2_db",
+                "-outfmt": 6
+              },
+              "processes": [
+                "COVERAGE_STATS"
+              ]
+            }
+          ]
+        },
+        "bowtie2": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-x": "pilon_index"
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS"
+              ]
+            }
+          ]
+        },
+        "bowtie2-build": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "ivar": {
+          "version": "1.3.1",
+          "steps": [
+            {
+              "subcommand": "consensus",
+              "options": {
+                "-q": 30
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "variants",
+              "options": {
+                "-q": 20,
+                "-t": 0.25,
+                "-m": 10
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS"
+              ]
+            }
+          ]
+        },
+        "mafft": {
+          "version": "7.490",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--keeplength": true,
+                "--add": true
+              },
+              "processes": [
+                "INTRAHOST"
+              ]
+            }
+          ]
+        },
+        "makeblastdb": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-in": true,
+                "-dbtype": "nucl",
+                "-out": "ba2_db"
+              },
+              "processes": [
+                "COVERAGE_STATS"
+              ]
+            }
+          ]
+        },
+        "nextclade": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": "dataset",
+              "options": {
+                "--output-dir": true
+              },
+              "processes": [
+                "NEXTCLADE"
+              ]
+            }
+          ]
+        },
+        "pangolin": {
+          "version": "4.3.4",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "-t": 1,
+                "--outfile": true
+              },
+              "processes": [
+                "INTRAHOST"
+              ]
+            },
+            {
+              "subcommand": null,
+              "options": {
+                "--outfile": true
+              },
+              "processes": [
+                "PANGOLIN"
+              ]
+            },
+            {
+              "subcommand": null,
+              "options": {
+                "--update": true
+              },
+              "processes": [
+                "UPDATE_PANGOLIN"
+              ]
+            }
+          ]
+        },
+        "picard": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "pilon": {
+          "version": "1.24",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "--minmq": 30,
+                "--fix": "gaps,indels",
+                "--mindepth": 10
+              },
+              "processes": [
+                "PILON_CORRECTION"
+              ]
+            }
+          ]
+        },
+        "samtools": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": "depth",
+              "options": {
+                "-a": true
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS",
+                "COVERAGE_STATS",
+                "INITIAL_MAPPING",
+                "SAMPLE_STATS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-Q": 0
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "mpileup",
+              "options": {
+                "-aa": true,
+                "-A": true,
+                "-d": 0,
+                "-B": true,
+                "-Q": 0
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-S": true,
+                "-b": true,
+                "-q": 30
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS",
+                "INITIAL_MAPPING"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-c": true,
+                "-F": 260
+              },
+              "processes": [
+                "ASSEMBLY_CONSENSUS",
+                "SAMPLE_STATS"
+              ]
+            },
+            {
+              "subcommand": "view",
+              "options": {
+                "-H": true
+              },
+              "processes": [
+                "COVERAGE_STATS"
+              ]
+            }
+          ]
+        },
+        "seqtk": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente Executada com parâmetros padrão.",
+          "steps": []
+        },
+        "trimmomatic": {
+          "version": null,
+          "note": "versão não declarada nos ymls do ambiente",
+          "steps": [
+            {
+              "subcommand": null,
+              "options": {
+                "mode": "PE",
+                "-phred33": true,
+                "LEADING": "3",
+                "TRAILING": "3",
+                "SLIDINGWINDOW": "4:20",
+                "MINLEN": "36"
+              },
+              "processes": [
+                "TRIMMOMATIC"
+              ]
+            }
+          ]
+        }
+      },
+      "nextclade_datasets": [
+        {
+          "name": "SARS-CoV-2",
+          "reference_accession": "MN908947",
+          "version_tag": "2026-01-06--14-59-32Z"
+        }
+      ]
+    }
+  }
+}

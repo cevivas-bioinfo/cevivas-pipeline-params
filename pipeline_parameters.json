@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-06T12:41:06Z",
+  "generated_at": "2026-11-06T12:49:54Z",
   "scope": "rotina comum de montagem; exclui vacinal, CIQ/CEQ, controles, EC e nsP3",
   "viruses": {
     "chikv": {
